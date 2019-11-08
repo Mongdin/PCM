@@ -10,25 +10,34 @@ from random import uniform as randnum
 
 #설정
 periods = 2 # sin 신호의 길이를 주기단위로 표시 radi(max) = 2*pi*periods
-sampling = 256 # 한 주기당 샘플링할 표본 갯수
-quantbit = 10
+sampling = 32 # 한 주기당 샘플링할 표본 갯수
+quantbit = 3
+extend = 4 
+u = 0                       #평균
+es = 1                      #분산
+es_ovr_n0 = 10
 AWGN_EN = True
-extend = 5
-sigma = 1 # 분산(sigma**2)
-u = 1 #평균
 
-def AWGN(x):
-    return (1/sqrt((sigma**2)*2*pi)*(exp(-(((x-u)**2)/2*(sigma**2)))))  
+SNR = pow(10,es_ovr_n0/10)
+sigma = sqrt(es/(2*SNR))
+
+def AWGN():
+    a = 0.3989422804014327 #1/sqrt(2*pi)
+    temp = randnum(0,1)
+    temp = sigma * sqrt(2.0 * log(1.0 / (1.0-temp)))
+    temp = u + temp * cos(2*pi*randnum(0,1))
+    return temp
+
+
+
+
+
+
+
 
 
 quantizing = 2**quantbit # 양자화 근사치 갯수(3비트)
-
-
 total_samples = periods*sampling
-
-
-
-
 sampled = []
 quantized = []
 quantized_level = []
@@ -39,7 +48,7 @@ pcm_ex = []
 integ = []
 picked = []
 decoded = []
-
+#######################################################################
 #표본화
 for x in range(total_samples):
     radi = round((x/sampling)*2,3) # radi*pi = 실제 radian 실수값 ->radi를 읽기편함
@@ -102,7 +111,7 @@ if AWGN_EN:
             pcm_ex.append(x)
         #AWGN Enable시 잡음 추가
     for x in range(len(pcm_ex)):
-        pcm_ex[x] += AWGN(randnum(-1,1))
+        pcm_ex[x] += AWGN()
 else:
     pcm_ex = pcm
 #######################################################
