@@ -38,8 +38,5 @@ for x in range(100):
     gaussrand()
 
 
-plot(res)
-
-show()
 
 
