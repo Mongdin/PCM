@@ -1,7 +1,4 @@
-'''
-Mongdin
-19/11/01 AWGN 추가
-'''
+
 
 from math import *
 from matplotlib.pyplot import *
@@ -134,7 +131,7 @@ pcm = []
 if AWGN_EN:
     for x in range(len(CHANNEL)):
         CHANNEL[x] += AWGN()
-
+        
 subplot(234)
 plot(CHANNEL)
 title('CHANNEL')
@@ -255,6 +252,7 @@ plot(decoded)
 title('Decoded')
 grid(True)
 
+print('AWGN : {}\nASK : {}\nINTEG_RECEIVER : {}'.format(AWGN_EN,ASK_EN,INTEG_RECEIVER))
 print("%d개의 주기,  주기당 %d개의 샘플, 총 %d개의 샘플, %d개의 양자화 레벨, %d개의 펄스"%(periods,sampling,total_samples,quantizing,len(pcm_ex)))
              
 show()
