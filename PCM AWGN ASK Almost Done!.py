@@ -3,7 +3,7 @@
 from math import *
 from matplotlib.pyplot import *
 from random import uniform as randnum
-
+from scipy import signal
 #설정#######################################################################
 periods = 2 # sin 신호의 길이를 주기단위로 표시 radi(max) = 2*pi*periods  ##
 sampling = 32 # 한 주기당 샘플링할 표본 갯수                              ##
@@ -16,6 +16,11 @@ es_ovr_n0 = 20                                                            ##
 AWGN_EN = True                                                            ##
 ASK_EN = True                                                             ##
 INTEG_RECEIVER = True                                                     ##
+#####################필터
+FILTER_EN = True
+w = 0.3
+b,a = signal.butter(5,w,'low')
+
 ############################################################################
 SNR = pow(10,es_ovr_n0/10)
 sigma = sqrt(es/(2*SNR))
@@ -243,13 +248,15 @@ title('Quantized level')
 grid(True)
 
 
+out = signal.filtfilt(b,a,decoded)
 
+print(out)
 
 
 
 subplot(236)
-plot(decoded)
-title('Decoded')
+plot(out)
+title('Decoded+LPF')
 grid(True)
 
 print('AWGN : {}\nASK : {}\nINTEG_RECEIVER : {}'.format(AWGN_EN,ASK_EN,INTEG_RECEIVER))
